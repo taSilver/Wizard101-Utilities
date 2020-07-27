@@ -352,11 +352,16 @@ function updateVisualStats(){
 }
 
 window.onload = function(){
-    if(document.getElementById("petPreset").value !== 'Custom'){
+    if(document.getElementById("petPreset").value !== 'None'){
         presetTalents();
     }
     if(document.getElementById("presetGear").value !== 'None'){
         presetGear();
     }
+    $(".gearSelector").chosen();
+    $(".talentSelector").chosen();
+    $(".miscSelector").chosen();
+
+
     flushSchool();
 }

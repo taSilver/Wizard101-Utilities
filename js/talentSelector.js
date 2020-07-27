@@ -60,6 +60,7 @@ function loadOptions(selectObj){
         if(selectedTalent !== "None")  cachedTalents[selectedTalent]["selected"] = true;
         $(selectObj).val(selectedTalent).attr('selected', true);
     }
+    $(selectObj).trigger("chosen:updated");
     updateLink(selectObj.id, selectedTalent);
 }
 
@@ -99,6 +100,7 @@ function loadPresets(){
             this.selected = true;
         }
     })
+    $("#petPreset").trigger("chosen:updated");
     presetTalents();
 }
 
@@ -110,6 +112,7 @@ function presetTalents(){
         $(`#${talentNum} option`).each(function () {
             if(this.value === cachedPresets[selectedPreset][talentNum]["talent_name"]){
                 this.selected = true;
+                $(`#${talentNum}`).trigger("chosen:updated")
             }
         })
     }

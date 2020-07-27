@@ -1,16 +1,13 @@
 let cachedGear = {};
 let cachedGearPresets = {};
 let gearTypes = ["hat", "robe", "boots", "wand", "athame", "amulet", "ring", "deck", "mount"];
+let cachedCategories = {};
+
 function loadAllGear(){
-    $('#categories').empty();
-    let categories = {};
     for(let gearType of gearTypes){
         document.getElementById(gearType.toLowerCase()).innerHTML = "";
-        for(let category of getGearForGearSelect(gearType)){
-            
-        }
+        getGearForGearSelect(gearType)
     }
-
     loadGearPresets();
 }
 
@@ -38,27 +35,17 @@ function updateGearSelect(gear, gearType){
     let usefulOnly = document.getElementById("onlyShowUsefulGear").checked;
     cachedGear[gearType] = {};
     let categories= {};
-    let currCategories = {".None" : true, "Mount": true};
-    $('#categories input').each(function(){
-        if(!(this.value in currCategories)){
-            currCategories[this.value] = this.checked;
-        }
-    })
     for(let gearItem of gear){
         if(!(gearItem.Category in categories)) categories[gearItem.Category] = [];
         categories[gearItem.Category].push(gearItem);
         cachedGear[gearType][gearItem.Name] = gearItem;
     }
-    $('#categories').empty()
+    
     Object.entries(categories).sort(function(a, b){if(a[0] < b[0]){ return -1;} if(a[0] > b[0]){ return 1;} return 0;}).forEach((entry) => {
         let category = entry[0];
         let obj = entry[1];
-        if(!(category in currCategories)){
-            if(obj[0].Meta){
-                currCategories[category] = true;
-            } else {
-                currCategories[category] = false;
-            }
+        if(!(category in cachedCategories)){
+            cachedCategories[category] = !!obj[0].Meta;
         }
         obj.sort(function(a, b){
             if (a.Name < b.Name) return -1;
@@ -66,13 +53,22 @@ function updateGearSelect(gear, gearType){
             return 0;})
         let group = $('<optgroup label="' + category + '" />');
         for(let item of obj){
-            if(!usefulOnly || currCategories[category]){
+            if(!usefulOnly || cachedCategories[category]){
                 $('<option />').html(item.Name).appendTo(group)
             }
         }
         group.appendTo(document.getElementById(gearType.toLowerCase()));
+        $(`#${gearType.toLowerCase()}`).trigger("chosen:updated")
     });
-    return currCategories;
+
+}
+
+function updateCategories(){
+    let ref = $('#categories');
+    ref.empty();
+    for (let category in cachedCategories) {
+        
+    }
 }
 
 function submitGear(){
@@ -151,6 +147,7 @@ function updateGearCombos(){
             this.selected = false;
         }
     })
+    $("#presetGear").trigger("chosen:updated");
     presetGear();
 }
 
@@ -166,6 +163,7 @@ function presetGear(){
         $(`#${type} option`).each(function (){
             if(this.value === preset[type]["Name"]){
                 this.selected = true;
+                $(`#${type}`).trigger("chosen:updated")
             } else {
                 this.selected = false;
             }
