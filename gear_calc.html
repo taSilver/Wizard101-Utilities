@@ -370,10 +370,6 @@
                     <label for="closeToLevel" class="form-check-label">Only show gear close to your level</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="onlyShowUsefulGear" onchange="loadAllGear()" checked>
-                    <label for="onlyShowUsefulGear" class="form-check-label">Only show 'useful' gear</label>
-                </div>
-                <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="showCrafted" onchange="loadAllGear()" checked>
                     <label for="showCrafted" class="form-check-label">Show crafted gear</label>
                 </div>
@@ -383,8 +379,7 @@
                 </div>
 
                 <a href="#" id="toggleCategories" data-toggle="collapse" data-target="#categories">Toggle gear categories</a>
-                <span id="categories"></span>
-
+                <div id="categories" class="collapse show"></div>
             </div>
 
         </div>
