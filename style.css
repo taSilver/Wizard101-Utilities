@@ -1,0 +1,38 @@
+
+
+.talentSelector {
+    width: 200px;
+}
+p {
+    margin: 0;
+}
+
+.icon {
+    height:35px;
+}
+
+.stats .row .col {
+    border: 1px solid;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#gear label {
+    display: inline-block;
+    width: 110px;
+    text-align: right;
+}
+
+.gearSelector {
+    width: 200px;
+}
+
+#petStats label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+h5 {
+    padding-top:5px;
+}

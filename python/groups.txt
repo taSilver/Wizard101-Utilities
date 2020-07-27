@@ -1,0 +1,147 @@
+Wiz gear calc groups:
+--School Specific:
+Hat groups:
+Barkingham
+Wintertusk crafted
+Waterworks
+House of Scales
+Atlantea Senator
+Atlantea Poseidon
+Tartarus Senator
+Tartarus Hades
+Tartarus Poseidon
+Tartarus Zeus
+Khrysalis crafted
+Darkmoor
+Krokopatra Exalted
+Rasputin
+Omen
+Mirage
+Cabal
+Emperyea crafted
+
+Robe groups:
+Barkingham
+Wintertusk crafted
+Waterworks
+House of Scales
+Atlantea Senator
+Atlantea Poseidon
+Tartarus Senator
+Tartarus Hades
+Tartarus Poseidon
+Tartarus Zeus
+Darkmoor
+Rattlebones Exalted
+Tenni-syn
+
+
+
+Boot groups:
+Barkingham
+Wintertusk crafted
+Waterworks
+House of Scales
+Avalon Crafted
+Atlantea Senator
+Atlantea Poseidon
+Azteca Crafted
+Tartarus Senator
+Tartarus Hades
+Tartarus Poseidon
+Tartarus Zeus
+Khrysalis crafted
+Darkmoor
+Meowiarty Exalted
+Rasputin
+Omen
+Mirage
+Emperyea Dropped
+Emperyea Crafted
+Cabal
+
+
+Wand groups:
+Hades
+Darkmoor
+Arcanum Legendary
+Arcanum Revered
+Cabal
+
+Athame groups:
+Wintertusk
+Khrysalis Crafted
+Darkmoor
+Morganthe
+Aphrodite
+
+Amulet groups:
+Barkingham
+House of Scales
+Shango's
+Darkmoor Tier 2
+Darkmoor Tier 1
+Morganthe
+Rasputin
+
+Ring groups:
+Shangribaa
+Barkingham
+Wintertusk
+Aphrodite
+Mirage
+Mimic
+Cabal
+
+Deck groups:
+House of Scales
+Khrysalis Damage
+Darkmoor Crafted
+Omen
+Rasputin
+Mirage
+Emperyea
+
+--Universal:
+Hat Groups:
+PvP Rank Gear (Veteran, Commander, Glendemmings)
+Duelist
+
+Robe Groups:
+PvP Rank Gear (Veteran, Commander, Glendemmings)
+Duelist
+
+Boot Groups:
+PvP Rank Gear (Veteran, Commander, Glendemmings)
+Duelist
+Rockstar kicks
+
+Wand Groups:
+Tanglewood
+Sky Iron Hasta
+Staff of Flashing Blades
+Duelist
+
+Athame Groups:
+Heartsteel
+Duelist
+Healing
+Blade of Felled Titan
+
+Amulet Groups:
+Duelist
+PvP Gear
+
+Ring Groups:
+Resist rings
+Healing
+Alpha Omega
+Duelist
+Diego gear
+
+Deck Groups:
+PvP decks
+Duelist
+
+Crown Gear
+Bundles

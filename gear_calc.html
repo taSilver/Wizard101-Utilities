@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wizard101 Stat Calculator</title>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+<div id="overallStats" class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="container stats" style="margin:0 auto;text-align: center;">
+                <h2>Overall Stats</h2>
+                <div class="row no-gutters">
+                    <div class="col"><strong>Other</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/health.png" class="icon" alt="Health"></div>
+                    <div class="col"><img src="img/mana.png" class="icon" alt="Mana"></div>
+                    <div class="col"><img src="img/powerPip.png" class="icon" alt="Pip Change"></div>
+                    <div class="col"><img src="img/incoming.png" alt="Incoming" style="height: 25px;"><img src="img/healing.png" alt="Healing" style="height:25px;"></div>
+                    <div class="col"><img src="img/outgoing.png" alt="Outgoing" style="height:25px;"><img src="img/healing.png" alt="Healing" style="height:25px;"></div>
+                    <div class="col"><img src="img/stunResist.png" class="icon" alt="Stun Resist"></div>
+                    <div class="col"><img src="img/shadowPip.png" class="icon" alt="Shadow Rating"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="healthUniversal">&nbsp;</div>
+                    <div class="col" id="manaUniversal">&nbsp;</div>
+                    <div class="col" id="pip_chanceUniversal">&nbsp;</div>
+                    <div class="col" id="incomingUniversal">&nbsp;</div>
+                    <div class="col" id="outgoingUniversal">&nbsp;</div>
+                    <div class="col" id="stun_resistUniversal">&nbsp;</div>
+                    <div class="col" id="shadow_ratingUniversal">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Damage</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="damage_percentFire">&nbsp;</div>
+                    <div class="col" id="damage_percentIce">&nbsp;</div>
+                    <div class="col" id="damage_percentStorm">&nbsp;</div>
+                    <div class="col" id="damage_percentMyth">&nbsp;</div>
+                    <div class="col" id="damage_percentLife">&nbsp;</div>
+                    <div class="col" id="damage_percentDeath">&nbsp;</div>
+                    <div class="col" id="damage_percentBalance">&nbsp;</div>
+                    <div class="col" id="damage_percentShadow">&nbsp;</div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="damage_flatFire">&nbsp;</div>
+                    <div class="col" id="damage_flatIce">&nbsp;</div>
+                    <div class="col" id="damage_flatStorm">&nbsp;</div>
+                    <div class="col" id="damage_flatMyth">&nbsp;</div>
+                    <div class="col" id="damage_flatLife">&nbsp;</div>
+                    <div class="col" id="damage_flatDeath">&nbsp;</div>
+                    <div class="col" id="damage_flatBalance">&nbsp;</div>
+                    <div class="col" id="damage_flatShadow">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Resist</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="resist_percentFire">&nbsp;</div>
+                    <div class="col" id="resist_percentIce">&nbsp;</div>
+                    <div class="col" id="resist_percentStorm">&nbsp;</div>
+                    <div class="col" id="resist_percentMyth">&nbsp;</div>
+                    <div class="col" id="resist_percentLife">&nbsp;</div>
+                    <div class="col" id="resist_percentDeath">&nbsp;</div>
+                    <div class="col" id="resist_percentBalance">&nbsp;</div>
+                    <div class="col" id="resist_percentShadow">&nbsp;</div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="resist_flatFire">&nbsp;</div>
+                    <div class="col" id="resist_flatIce">&nbsp;</div>
+                    <div class="col" id="resist_flatStorm">&nbsp;</div>
+                    <div class="col" id="resist_flatMyth">&nbsp;</div>
+                    <div class="col" id="resist_flatLife">&nbsp;</div>
+                    <div class="col" id="resist_flatDeath">&nbsp;</div>
+                    <div class="col" id="resist_flatBalance">&nbsp;</div>
+                    <div class="col" id="resist_flatShadow">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Accuracy</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="accuracyFire">&nbsp;</div>
+                    <div class="col" id="accuracyIce">&nbsp;</div>
+                    <div class="col" id="accuracyStorm">&nbsp;</div>
+                    <div class="col" id="accuracyMyth">&nbsp;</div>
+                    <div class="col" id="accuracyLife">&nbsp;</div>
+                    <div class="col" id="accuracyDeath">&nbsp;</div>
+                    <div class="col" id="accuracyBalance">&nbsp;</div>
+                    <div class="col" id="accuracyShadow">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Critical Rating</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="criticalFire">&nbsp;</div>
+                    <div class="col" id="criticalIce">&nbsp;</div>
+                    <div class="col" id="criticalStorm">&nbsp;</div>
+                    <div class="col" id="criticalMyth">&nbsp;</div>
+                    <div class="col" id="criticalLife">&nbsp;</div>
+                    <div class="col" id="criticalDeath">&nbsp;</div>
+                    <div class="col" id="criticalBalance">&nbsp;</div>
+                    <div class="col" id="criticalShadow">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Critical Block</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="blockFire">&nbsp;</div>
+                    <div class="col" id="blockIce">&nbsp;</div>
+                    <div class="col" id="blockStorm">&nbsp;</div>
+                    <div class="col" id="blockMyth">&nbsp;</div>
+                    <div class="col" id="blockLife">&nbsp;</div>
+                    <div class="col" id="blockDeath">&nbsp;</div>
+                    <div class="col" id="blockBalance">&nbsp;</div>
+                    <div class="col" id="blockShadow">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Pierce</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="pierceFire">&nbsp;</div>
+                    <div class="col" id="pierceIce">&nbsp;</div>
+                    <div class="col" id="pierceStorm">&nbsp;</div>
+                    <div class="col" id="pierceMyth">&nbsp;</div>
+                    <div class="col" id="pierceLife">&nbsp;</div>
+                    <div class="col" id="pierceDeath">&nbsp;</div>
+                    <div class="col" id="pierceBalance">&nbsp;</div>
+                    <div class="col" id="pierceShadow">&nbsp;</div>
+                </div>
+
+                <div class="row no-gutters">
+                    <div class="col"><strong>Pip Conversion</strong></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col"><img src="img/fire.png" class="icon" alt="Fire"></div>
+                    <div class="col"><img src="img/ice.png" class="icon" alt="Ice"></div>
+                    <div class="col"><img src="img/storm.png" class="icon" alt="Storm"></div>
+                    <div class="col"><img src="img/myth.png" class="icon" alt="Myth"></div>
+                    <div class="col"><img src="img/life.png" class="icon" alt="Life"></div>
+                    <div class="col"><img src="img/death.png" class="icon" alt="Death"></div>
+                    <div class="col"><img src="img/balance.png" class="icon" alt="Balance"></div>
+                    <div class="col"><img src="img/shadow.png" class="icon" alt="Shadow"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col" id="pip_conversionFire">&nbsp;</div>
+                    <div class="col" id="pip_conversionIce">&nbsp;</div>
+                    <div class="col" id="pip_conversionStorm">&nbsp;</div>
+                    <div class="col" id="pip_conversionMyth">&nbsp;</div>
+                    <div class="col" id="pip_conversionLife">&nbsp;</div>
+                    <div class="col" id="pip_conversionDeath">&nbsp;</div>
+                    <div class="col" id="pip_conversionBalance">&nbsp;</div>
+                    <div class="col" id="pip_conversionShadow">&nbsp;</div>
+                </div>
+        <!--        <div style="display: inline-flex;max-width: 33%;min-width: 300px;height:100%;">-->
+        <!--            <img src="img/stats1.png" alt="First stats page" style="max-width: 571px;max-height:865px;">-->
+        <!--        </div>-->
+        <!--        <div style="display: inline-flex;max-width: 33%;min-width: 300px;height:100%;">-->
+        <!--            <img src="img/stats2.png" alt="Second stats page" style="max-width: 571px;max-height:865px;">-->
+        <!--        </div>-->
+        <!--        <div style="display: inline-flex;max-width: 33%;min-width: 300px;height:100%;">-->
+        <!--            <img src="img/stats3.png" alt="Third stats page" style="max-width: 571px;max-height:865px;">-->
+        <!--        </div>-->
+            </div>
+        </div>
+        <div class="col-4" style="overflow-y: hidden">
+            <div class="container" style="text-align: center;">
+                <h2>Cards</h2>
+                <p><em>Cards from Pets and Gear will appear here</em></p>
+            </div><br>
+            <div class="container" style="text-align: center">
+                <h2>Gear</h2>
+                <h5>Meta Load-out</h5>
+                <label for="presetGear">Common Gear Combos</label><br>
+                <select name="presetGear" id="presetGear" onchange="presetGear()">
+                    <option>None</option>
+                </select>
+                <h5>Gear Selection</h5>
+                <form name="gear" id="gear" onchange="updateStatsFromGear(); updateVisualStats();">
+                    <label for="hat">Hat (<a href="#" id="hatlink">Wiki</a>):</label>
+                    <select name="hat" id="hat" class="gearSelector">
+                    </select><br>
+                    <label for="robe">Robe (<a href="#" id="robelink">Wiki</a>):</label>
+                    <select name="robe" id="robe" class="gearSelector">
+                    </select><br>
+                    <label for="boots">Boots (<a href="#" id="bootslink">Wiki</a>):</label>
+                    <select name="talent3" id="boots" class="gearSelector">
+                    </select><br>
+                    <label for="wand">Wand (<a href="#" id="wandlink">Wiki</a>):</label>
+                    <select name="wand" id="wand" class="gearSelector">
+                    </select><br>
+                    <label for="athame">Athame (<a href="#" id="athamelink">Wiki</a>):</label>
+                    <select name="athame" id="athame" class="gearSelector">
+                    </select><br>
+                    <label for="amulet">Amulet (<a href="#" id="amuletlink">Wiki</a>):</label>
+                    <select name="amulet" id="amulet" class="gearSelector">
+                    </select><br>
+                    <label for="ring">Ring (<a href="#" id="ringlink">Wiki</a>):</label>
+                    <select name="ring" id="ring" class="gearSelector">
+                    </select><br>
+                    <label for="deck">Deck (<a href="#" id="decklink">Wiki</a>):</label>
+                    <select name="deck" id="deck" class="gearSelector">
+                    </select><br>
+                    <label for="mount">Mount (<a href="#" id="mountlink">Wiki</a>):</label>
+                    <select name="mount" id="mount" class="gearSelector">
+                    </select><br>
+                </form>
+                <h5>Add New Gear Item</h5>
+                <form name="newGear">
+                    <label for="newGear">
+                        Gear Name:
+                    </label>
+                    <input type="text" name="newGear" id="newGear" placeholder="Wand of Seven Schools">
+                    <label for="newGearCategory">
+                        Gear Category:
+                    </label>
+                    <input type="text" name="newGearCategory" id="newGearCategory" placeholder="Unicorn Way">
+                    <label for="newGearMeta">
+                        Meta:
+                    </label>
+                    <input type="checkbox" name="newGearMeta" id="newGearMeta"><br>
+                    <input type="button" onclick="submitGear()" value="Submit">
+                </form>
+            </div>
+        </div>
+        <div id="options" class="col-2">
+            <h2>Options</h2>
+            <div>
+                <label for="school">School: </label>
+                <select name="school" id="school" onchange="flushSchool(); ">
+                    <option value="Fire">Fire</option>
+                    <option value="Ice">Ice</option>
+                    <option value="Storm">Storm</option>
+                    <option value="Myth">Myth</option>
+                    <option value="Life">Life</option>
+                    <option value="Death">Death</option>
+                    <option value="Balance">Balance</option>
+                </select>
+                <label for="level">Level:</label>
+                <input name="level" id="level" type="number" min="1" max="130" style="width: 55px" placeholder="1" onchange="loadAllGear(); updateBaseStats(); updateVisualStats()">
+            </div>
+            <label for="enablePet">
+                <input type="checkbox" id="enablePet" onchange="updateAll()" checked> Enable Pet
+            </label>
+            <label for="hideOffSchool" style="margin: 0 auto;">
+                <input type="checkbox" id="hideOffSchool" onchange="getPetTalents(); loadAllTalents()" checked> Ignore off school pet talents
+            </label><br>
+            <label for="onlyShowUsefulTalents">
+                <input type="checkbox" id="onlyShowUsefulTalents" onchange="getPetTalents(); loadAllTalents()" checked> Only show 'useful' pet talents
+            </label>
+            <label for="talentOrder"> Order Pet Talents by:
+                <select name="talentOrder" id="talentOrder">
+                    <option value="">Alphabetical</option>
+                    <option value="talent_school">School</option>
+                    <option value="talent_type" selected>Talent Type</option>
+                </select>
+            </label>
+            <label for="closeToLevel">
+                <input type="checkbox" id="closeToLevel" onchange="loadAllGear()" checked> Only show gear close to your level
+            </label>
+            <label for="onlyShowUsefulGear">
+                <input type="checkbox" id="onlyShowUsefulGear" onchange="loadAllGear()" checked> Only show 'useful' gear
+            </label>
+            <label for="showCrafted">
+                <input type="checkbox" id="showCrafted" onchange="loadAllGear()" checked> Show crafted gear
+            </label>
+            <label for="noOffSchoolPack">
+                <input type="checkbox" id="noOffSchoolPack" onchange="loadAllGear()" checked> Hide off school pack gear
+            </label>
+            <span id="categories"></span>
+        </div>
+    </div>
+</div>
+<div style="padding-bottom: 20px;padding-top: 20px" id="pets">
+    <div class="container" style="text-align: center">
+        <h2>Pet</h2>
+        <div class="row">
+            <div class="col" style="min-width: 200px;padding-bottom: 10px;">
+                <h4>Talents from Pet</h4>
+                <p><em>Your pet talents will appear here with values.</em></p>
+                <span id="petTalentStats"></span>
+            </div><br>
+            <div class="col" style="min-width: 200px;padding-bottom: 10px;">
+                <h4>Overall Stats from Pet</h4>
+                <p style="padding-bottom: 10px;"><em>Your overall stats from your pet will appear here.</em></p>
+                <span  id="petOverallStats"></span>
+            </div><br>
+            <div class="col" style="min-width: 200px">
+                <h4>Pet Stats</h4>
+                <p><em>Enter your pet stats here.</em></p>
+                <form name="petStats" id="petStats" onkeyup="updateStatsFromPet()">
+                    <label for="petStr">
+                        Strength:
+                    </label>
+                    <input type="number" id="petStr" min="0" max="255" placeholder="0" class="petStatLabel" style="width: 55px">
+                    <br>
+                    <label for="petInt">
+                        Intellect:
+                    </label>
+                    <input type="number" id="petInt" min="0" max="250" placeholder="0" class="petStatLabel" style="width: 55px">
+                    <br>
+                    <label for="petAgi">
+                        Agility:
+                    </label>
+                    <input type="number" id="petAgi" min="0" max="260" placeholder="0" class="petStatLabel" style="width: 55px">
+                    <br>
+                    <label for="petWill">
+                        Will:
+                    </label>
+                    <input type="number" id="petWill" min="0" max="260" placeholder="0" class="petStatLabel" style="width: 55px">
+                    <br>
+                    <label for="petPow">
+                        Power:
+                    </label>
+                    <input type="number" id="petPow" min="0" max="250" placeholder="0" class="petStatLabel" style="width: 55px">
+                    <br>
+                    <input type="button" class="btn-dark" value="Max Stats" id="maxPetStats">
+                </form>
+            </div><br>
+            <div class="col" style="min-width: 200px">
+                <h4>Pet Talents</h4>
+                <form name="petTalents" onchange="loadAllTalents();updateStatsFromPet();updateVisualStats();">
+                    <label for="talent1">Talent 1 (<a href="#" id="talent1link">Wiki</a>):</label>
+                    <select name="talent1" id="talent1" class="petStatLabel talentSelector">
+                    </select><br>
+                    <label for="talent2">Talent 2 (<a href="#" id="talent2link">Wiki</a>):</label>
+                    <select name="talent2" id="talent2" class="petStatLabel talentSelector">
+                    </select><br>
+                    <label for="talent3">Talent 3 (<a href="#" id="talent3link">Wiki</a>):</label>
+                    <select name="talent3" id="talent3" class="petStatLabel talentSelector">
+                    </select><br>
+                    <label for="talent4">Talent 4 (<a href="#" id="talent4link">Wiki</a>):</label>
+                    <select name="talent4" id="talent4" class="petStatLabel talentSelector">
+                    </select><br>
+                    <label for="talent5">Talent 5(<a href="#" id="talent5link">Wiki</a>):</label>
+                    <select name="talent5" id="talent5" class="petStatLabel talentSelector">
+                    </select><br>
+                    <label for="talent6">Jewel (<a href="#" id="talent6link">Wiki</a>):</label>
+                    <select name="talent6" id="talent6" class="petStatLabel talentSelector">
+                    </select><br>
+                </form>
+            </div>
+            <div class="col" style="min-width: 200px">
+                <h4>Meta Pets</h4>
+                <p><em>Enter your pet talents here.</em></p>
+                <label for="petPreset" style="margin:0 auto;text-align: center;width:100%;">Common Talent Combos:</label>
+                <select name="petPreset" id="petPreset" style="width: 200px;text-align: center;margin: 0 auto" onchange="if (this.value !== 'Custom'){ presetTalents(); updateStatsFromPet()} updateVisualStats();">
+                    <option value="Custom">Custom</option>
+                </select>
+            </div><br>
+        </div>
+    </div>
+</div>
+</body>
+
+<!-- Personal JS Scripts -->
+<script src="js/talentSelector.js" type="text/javascript"></script>
+<script src="js/petStatCalc.js" type="text/javascript"></script>
+<script src="js/gear.js" type="text/javascript"></script>
+<script src="js/stats.js" type="text/javascript"></script>
+
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</html>
+
+<!--TODO-->
+<!--Add pet body selection-->
+<!--Add display of Card-->
+<!-- Sockets and Jewels -->
+<!-- Pack and bundle gear -->
+<!-- Save and add configurations -->
+<!-- more options? -->
