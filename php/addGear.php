@@ -24,7 +24,7 @@ function addGear($gearName, $gearCategory, $gearMeta){
     $gearId = getGearId($gearName);
 
     $miscTypes = ["health", "mana", "incoming", "outgoing", "shadow_rating", "stun_resist", "pip_chance"];
-    $multiValue = ['Cards', 'Maycast', 'Mastery'];
+    $multiValue = ['Cards', 'May Cast', 'Mastery'];
     $tableTypes = ['accuracy', 'critical', 'block', 'damage_flat', "damage_percent", 'pierce', 'pip_conversion', 'resist_flat', "resist_percent"];
     $miscStatName = "";
     $miscStatAmt = "";
@@ -51,6 +51,26 @@ function addGear($gearName, $gearCategory, $gearMeta){
         $stmt->close();
     }
 
+    if(property_exists($gearStats, "Cards")){
+        foreach($gearStats["Cards"] as $card){
+            $cardId = getCardId($card);
+            $stmt = $dbc->prepare("INSERT INTO gear_card (gear_id, card_id, card_amount) VALUES (?, ?, ?)");
+            $stmt->bind_param("iii", $gearId, $cardId, $card["Amount"]);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+
+    if(property_exists($gearStats, "May Cast")){
+        foreach ($gearStats["May Cast"] as $card){
+            $cardId = getCardId($card);
+            $stmt = $dbc->prepare("INSERT INTO gear_card (gear_id, card_id, card_maycast) VALUES (?, ?, 'Y')");
+            $stmt->bind_param("ii", $gearId, $cardId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+
     if(property_exists($gearStats, "Socket")){
         $socketNums = [0, 0, 0, 0];
         $socketTypes = ["Circle", "Square", "Tear", "Triangle"];
@@ -68,6 +88,25 @@ function addGear($gearName, $gearCategory, $gearMeta){
 
     $dbc->close();
     echo "$gearName added";
+}
+
+function getCardId($card)
+{
+    $dbc = createConnection();
+    $stmt = $dbc->prepare("SELECT card_id FROM card WHERE card_url = ?");
+    $stmt->bind_param("s", $card);
+    $stmt->execute();
+    $stmt->bind_result($cardId);
+    $exists = $stmt->fetch();
+    $stmt->close();
+
+    if (!$exists) {
+        $stmt = $dbc->prepare("INSERT INTO card (card_name, card_url) VALUES (?, ?)");
+        $stmt->bind_param("ss", $card["Name"], $card);
+        $stmt->execute();
+        $stmt->close();
+    }
+    return $cardId;
 }
 
 function getGearId($gearName)
@@ -126,17 +165,23 @@ function scrapeGear($gear){
         $stats = array_slice($stats, 4);
     }
     for($i = 0; $i < count($stats); $i++){
-        if($i > 16 && $i < 25 && preg_match_all("/\+([0-9]+)|title=\"ItemCard:([a-zA-z ]+)/", $stats[$i], $matches)){
+        if($i > 16 && $i < 25 && preg_match_all("/\+([0-9]+)|title=\"ItemCard:([a-zA-z ]+)|href=\"(.+?)\"/", $stats[$i], $matches)){
             if($i == 17){
                 $itemStats->{"Cards"} = new stdClass();
             }
-            $itemStats->{"Cards"}->{$matches[2][1]} = $matches[1][0];
+            $itemStats->{"Cards"}->{$matches[2][2]} = new stdClass();
+            $itemStats->{"Cards"}->{$matches[2][2]}->{"Name"} = $matches[2][2];
+            $itemStats->{"Cards"}->{$matches[2][2]}->{"Amount"} = $matches[1][0];
+            $itemStats->{"Cards"}->{$matches[2][2]}->{"URL"} = "http://www.wizard101central.com".$matches[3][1];
             continue;
         }
-        if($i == 30 && preg_match_all("/title=\"ItemCard:([a-zA-z ]+)/", $stats[$i], $matches)){
+        if($i == 30 && preg_match_all("/title=\"ItemCard:([a-zA-z ]+)|href=\"(.+?)\"/", $stats[$i], $matches)){
             $itemStats->{"May Cast"} = new stdClass();
             for($j = 0; $j < count($matches[1]);$j++){
-                $itemStats->{"May Cast"}->{$matches[1][$j]} = 1;
+                $itemStats->{"May Cast"}->{$matches[1][$j]} = new stdClass();
+                $itemStats->{"May Cast"}->{$matches[1][$j]}->{"Name"} = $matches[1][$j];
+                $itemStats->{"May Cast"}->{$matches[1][$j]}->{"URL"} = "http://www.wizard101central.com".$matches[2][$i + 1];
+
             }
         }
         if(preg_match_all("/\+([0-9]+)|Icon\)_([a-zA-z]+)/", $stats[$i], $matches)){
