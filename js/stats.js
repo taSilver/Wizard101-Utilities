@@ -153,6 +153,7 @@ function updateAll(){
 }
 
 function flushSchool(){
+    cachedCategories = {};
     getPetTalents();
     getPetPresets();
     loadAllGear();

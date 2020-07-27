@@ -2,6 +2,7 @@ let cachedGear = {};
 let cachedGearPresets = {};
 let gearTypes = ["hat", "robe", "boots", "wand", "athame", "amulet", "ring", "deck", "mount"];
 let cachedCategories = {};
+let requests = [];
 
 function loadAllGear(){
     for(let gearType of gearTypes){
@@ -21,10 +22,15 @@ function getGearForGearSelect(gearType){
     }
     let xhttp = new XMLHttpRequest();
     let gear = null;
+    requests.push(gearType)
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200){
             gear = JSON.parse(this.responseText);
+            requests.splice(requests.indexOf(gearType), 1)
             updateGearSelect(gear, gearType);
+            if(requests.length === 0){
+                updateCategories();
+            }
         }
     }
     xhttp.open("GET", `php/getGear.php?minLevel=${minLevel}&gearType=${gearType}&maxLevel=${maxLevel}&school=${school}&schoolOnly=${packSchoolOnly}`, true)
@@ -32,7 +38,6 @@ function getGearForGearSelect(gearType){
 }
 
 function updateGearSelect(gear, gearType){
-    let usefulOnly = document.getElementById("onlyShowUsefulGear").checked;
     cachedGear[gearType] = {};
     let categories= {};
     for(let gearItem of gear){
@@ -40,8 +45,10 @@ function updateGearSelect(gear, gearType){
         categories[gearItem.Category].push(gearItem);
         cachedGear[gearType][gearItem.Name] = gearItem;
     }
-    
-    Object.entries(categories).sort(function(a, b){if(a[0] < b[0]){ return -1;} if(a[0] > b[0]){ return 1;} return 0;}).forEach((entry) => {
+    let ref = $(`#${gearType.toLowerCase()}`)
+    let selected = ref.val();
+    ref.empty();
+    Object.entries(categories).sort((a, b) => sortByKey(a, b)).forEach((entry) => {
         let category = entry[0];
         let obj = entry[1];
         if(!(category in cachedCategories)){
@@ -53,22 +60,31 @@ function updateGearSelect(gear, gearType){
             return 0;})
         let group = $('<optgroup label="' + category + '" />');
         for(let item of obj){
-            if(!usefulOnly || cachedCategories[category]){
+            if(cachedCategories[category]){
                 $('<option />').html(item.Name).appendTo(group)
             }
         }
-        group.appendTo(document.getElementById(gearType.toLowerCase()));
-        $(`#${gearType.toLowerCase()}`).trigger("chosen:updated")
+        group.appendTo(ref);
+        ref.val(selected).attr("selected", true)
+        ref.trigger("chosen:updated")
     });
-
 }
 
 function updateCategories(){
     let ref = $('#categories');
+    let excludedCategories = ["Mount", ".None"];
     ref.empty();
-    for (let category in cachedCategories) {
-        
-    }
+    Object.entries(cachedCategories).sort((a, b) => sortByKey(a, b)).forEach((entry) => {
+        let category = entry[0];
+        if(excludedCategories.includes(category)){ return;}
+        let divElement = $(`<div class="form-check"></div>`);
+        let element = $(`<input type='checkbox' class="form-check-input" ${cachedCategories[category] ? "checked" : ""}>`);
+        element.change(function(){cachedCategories[category] = !cachedCategories[category]; for(let gearType of gearTypes){updateGearSelect(Object.values(cachedGear[gearType]), gearType)}});
+        element.appendTo(divElement);
+
+        $(`<label class="form-check-label"> Show ${category}</label>`).appendTo(divElement);
+        divElement.appendTo(ref)
+    })
 }
 
 function submitGear(){
@@ -78,12 +94,12 @@ function submitGear(){
             console.log(this.responseText);
         }
     }
-    let gearMeta = document.getElementById("newGearMeta").checked ? "Y" : "N";
-    document.getElementById("newGearMeta").checked = false;
-    let gearCategory = document.getElementById("newGearCategory").value;
-    document.getElementById("newGearCategory").value = "";
-    let gearName = document.getElementById("newGear").value;
-    document.getElementById("newGear").value = "";
+    let gearMeta = $("#newGearMeta").checked ? "Y" : "N";
+    $("#newGearMeta").checked = false;
+    let gearCategory = $("#newGearCategory").val();
+    $("#newGearCategory").val("");
+    let gearName = $("#newGear").val();
+    $("#newGear").val("");
     xhttp.open("GET", `php/addGear.php?gearName=${gearName}&gearCategory=${gearCategory}&gearMeta=${gearMeta}`);
     xhttp.send()
 }
@@ -153,6 +169,12 @@ function updateGearCombos(){
 
 function between(x, min, max){
     return x <= max && x >= min;
+}
+
+function sortByKey(a, b) {
+    if(a[0] < b[0]){ return -1;}
+    if(a[0] > b[0]){ return 1;}
+    return 0;
 }
 
 function presetGear(){
