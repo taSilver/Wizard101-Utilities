@@ -1,5 +1,5 @@
 <?php
-require 'simple_html_dom.php';
+require_once 'simple_html_dom.php';
 require_once 'dbConnection.php';
 
 function addGear($gearName, $gearCategory, $gearMeta){
@@ -23,8 +23,7 @@ function addGear($gearName, $gearCategory, $gearMeta){
 
     $gearId = getGearId($gearName);
 
-    $miscTypes = ["health", "mana", "incoming", "outgoing", "shadow_rating", "stun_resist", "pip_chance"];
-    $multiValue = ['Cards', 'May Cast', 'Mastery'];
+    $miscTypes = ["health", "mana", "incoming", "outgoing", "shadow_rating", "stun_resist", "pip_chance", "starting_pip", "starting_powerpip"];
     $tableTypes = ['accuracy', 'critical', 'block', 'damage_flat', "damage_percent", 'pierce', 'pip_conversion', 'resist_flat', "resist_percent"];
     $miscStatName = "";
     $miscStatAmt = "";
@@ -52,10 +51,10 @@ function addGear($gearName, $gearCategory, $gearMeta){
     }
 
     if(property_exists($gearStats, "Cards")){
-        foreach($gearStats["Cards"] as $card){
+        foreach($gearStats->{"Cards"} as $card){
             $cardId = getCardId($card);
             $stmt = $dbc->prepare("INSERT INTO gear_card (gear_id, card_id, card_amount) VALUES (?, ?, ?)");
-            $stmt->bind_param("iii", $gearId, $cardId, $card["Amount"]);
+            $stmt->bind_param("iii", $gearId, $cardId, $card->{"Amount"});
             $stmt->execute();
             $stmt->close();
         }
@@ -94,18 +93,23 @@ function getCardId($card)
 {
     $dbc = createConnection();
     $stmt = $dbc->prepare("SELECT card_id FROM card WHERE card_url = ?");
-    $stmt->bind_param("s", $card);
+    $stmt->bind_param("s", $card->{"URL"});
     $stmt->execute();
+    $stmt->store_result();
     $stmt->bind_result($cardId);
+
     $exists = $stmt->fetch();
     $stmt->close();
 
     if (!$exists) {
         $stmt = $dbc->prepare("INSERT INTO card (card_name, card_url) VALUES (?, ?)");
-        $stmt->bind_param("ss", $card["Name"], $card);
+        $stmt->bind_param("ss", $card->{"Name"}, $card->{"URL"});
         $stmt->execute();
         $stmt->close();
+        $dbc->close();
+        return getCardId($card);
     }
+    $dbc->close();
     return $cardId;
 }
 
@@ -126,7 +130,6 @@ function getGearId($gearName)
 
 function scrapeGear($gear){
     $url = "http://www.wizard101central.com/wiki/Item:".urlencode((str_replace(' ', '_', $gear)));
-    echo "$url ";
     $itemStats = new stdClass();
     $referenceArr = ['Health', 'Mana', 'Energy', 'Pip Chance', 'Shadow Rating',
         'Accuracy', 'Critical', 'Block', 'Damage', 'Resist', 'Stun Resist', 'Pierce', 'Pip Conversion',
@@ -265,7 +268,7 @@ function scrapeMount($mount){
 }
 
 //echo "<pre>"; var_dump(scrapeGear("Duelist's Devil-May-Care Deck (Level 130+)")); echo "</pre>";
-addGear($_GET['gearName'], $_GET['gearCategory'], $_GET['gearMeta']);
+//addGear($_GET['gearName'], $_GET['gearCategory'], $_GET['gearMeta']);
 //foreach(["Balance Ghulture", "Battle Havox", "Battle Narwhal", "Clockwork Courser", "Crystal Unicorn", "Death Ghulture", "Desert Racer", "Festive Fox", "Fire Ghulture", "Ice Ghulture", "Life Ghulture", "Mammoth Mini", "Myth Ghulture", "Storm Ghulture", "Vulpine Avenger", "Waddling Witch Hut"] as $mountName){
 //    addGear($mountName, "Mount", "Y");
 //}
