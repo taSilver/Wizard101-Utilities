@@ -64,5 +64,4 @@ document.getElementById("maxPetStats").addEventListener("click", function(){
         document.getElementById(`pet${stat}`).value = maxStats[stat]
     }
     updateStatsFromPet();
-    updateVisualStats();
 })

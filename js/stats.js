@@ -134,11 +134,17 @@ let blankStats = {
     "Shadow Rating": {
         "Universal": 0,
         "sign": ''
+    },
+    "Starting Pip" : 0,
+    "Starting PowerPip": 0,
+    "Cards": {
+
     }
 };
 let statsFromGear = {};
 let statsFromPet = {};
 let baseStats = {};
+let stats = {};
 
 function updateAll(){
     let enablePet = document.getElementById("enablePet").checked;
@@ -290,26 +296,37 @@ function updateStatsFromPet(){
 
 function extractStatsFromGear(stat, statAmt){
     let usedStats = ["Health", "Mana", "Pip Chance", "Incoming", "Outgoing", "Stun Resist", "Shadow Rating", "Damage Percent",
-        "Damage Flat", "Resist Percent", "Resist Flat", "Accuracy", "Critical", "Block", "Pierce", "Pip Conversion"];
+        "Damage Flat", "Resist Percent", "Resist Flat", "Accuracy", "Critical", "Block", "Pierce", "Pip Conversion", "Cards", "Starting Pip", "Starting PowerPip"];
     let miscStats = ["Health", "Mana", "Pip Chance", "Incoming", "Outgoing", "Stun Resist", "Shadow Rating"];
+    let otherStats = ["Cards", "Starting Pip", "Starting PowerPip"];
     if(!usedStats.includes(stat)) return;
     if(!statsFromGear.hasOwnProperty(stat)){
-        statsFromGear[stat] = {
-            "Universal": 0,
-            "Fire": 0,
-            "Ice": 0,
-            "Storm": 0,
-            "Life": 0,
-            "Death": 0,
-            "Myth": 0,
-            "Balance": 0,
-            "Shadow": 0
-        };
+        if(otherStats.includes(stat)){
+            statsFromGear[stat] = JSON.parse(JSON.stringify(blankStats[stat]));
+        } else {
+            statsFromGear[stat] = {
+                "Universal": 0,
+                "Fire": 0,
+                "Ice": 0,
+                "Storm": 0,
+                "Life": 0,
+                "Death": 0,
+                "Myth": 0,
+                "Balance": 0,
+                "Shadow": 0
+            };
+        }
     }
     if(miscStats.includes(stat)){
         statsFromGear[stat]["Universal"] += statAmt;
+    } else if(otherStats.includes(stat)){
+        if(stat === "Cards"){
+            Object.entries(statAmt).forEach(entry => statsFromGear[stat][entry[0]] = Object.assign(entry[1], {"Type": "Item Card"}));
+        } else {
+            statsFromGear[stat] += statAmt
+        }
     } else {
-        Object.entries(statAmt).forEach(schoolStat => statsFromGear[stat][schoolStat[0]] += Math.max(schoolStat[1], 0));
+        Object.entries(statAmt).forEach(schoolStat => statsFromGear[stat][schoolStat[0]] = Math.max(schoolStat[1] + statsFromGear[stat][schoolStat[0]], 0));
     }
 
 }
@@ -326,23 +343,45 @@ function updateStatsFromGear(){
 
 function updateVisualStats(){
     stats = JSON.parse(JSON.stringify(blankStats));
+    $("#otherStats").empty();
     let universalStats = ["Incoming", "Outgoing", "Health", "Mana", "Shadow Rating", "Pip Chance", "Stun Resist"]
+    let otherStats = ["Cards", "May Cast", "Will Cast", "Starting Pip", "Starting PowerPip"];
     let schools = ["Fire", "Ice", "Storm", "Balance", "Life", "Death", "Myth", "Universal"];
     let statSources = [baseStats, statsFromPet, statsFromGear];
 
     for(let statSource of statSources){
         for(let statType in statSource){
-            if(!["Maycast", "Willcast"].includes(statType)){
+            if(!otherStats.includes(statType)){
                 for(let school of schools){
                     if((school in statSource[statType]) && statSource[statType][school] > 0){
                         stats[statType][school] += statSource[statType][school];
                     }
+                }
+            } else {
+                if(["Cards", "May Cast", "Will Cast"].includes(statType)){
+                    stats[statType] = JSON.parse(JSON.stringify(statSource[statType]))
+                } else {
+                    stats[statType] += statSource[statType];
                 }
             }
         }
     }
 
     for(let stat in stats){
+        if(otherStats.includes(stat)){
+            if(["Starting PowerPip", "Starting Pip"].includes(stat)){
+                if(stats[stat] > 0){
+                    let amt = stats[stat];
+                    $(`<p>+${amt} ${stat + (amt > 1 ? "s" : "")}</p>`).appendTo($("#otherStats"));
+                }
+            } else if(stat === "Cards"){
+                for(let card in stats[stat]){
+                    let amt = stats[stat][card]["Amount"];
+                    $(`<p>+${amt} <a href="${stats[stat][card]['URL']}">${card}</a> ${stats[stat][card]["Type"] + (amt > 1 ? "s": "")}</p>`).appendTo($("#otherStats"));
+                }
+            }
+            continue;
+        }
         for(let school in stats[stat]){
             if(school === "sign" || (school === "Universal" && !universalStats.includes(stat))) continue;
             let amount = school !== "Universal" ? stats[stat][school] + stats[stat]["Universal"] : stats[stat][school]

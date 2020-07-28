@@ -17,7 +17,7 @@ function getGearForGearSelect(gearType){
     let minLevel = 0;
     let school = document.getElementById("school").value;
     let packSchoolOnly = document.getElementById("noOffSchoolPack").checked;
-    if(document.getElementById("closeToLevel")){
+    if(document.getElementById("closeToLevel").checked){
         minLevel = maxLevel - 30;
     }
     let xhttp = new XMLHttpRequest();
@@ -193,7 +193,6 @@ function presetGear(){
     }
     presetTalents()
     updateStatsFromGear();
-    updateVisualStats();
 }
 
 function addPackGear(packName, gearName, gearMeta){
@@ -207,6 +206,19 @@ function addPackGear(packName, gearName, gearMeta){
         }
         xhttp.open("GET", `php/addGear.php?gearName=${gearName} (${level})&gearCategory=${packName}&gearMeta=${gearMeta}`);
         xhttp.send()
+    }
+}
+
+function addPacks(){
+    let packs = {
+        "Professor's Hoard Pack - Death" : ["Y", ],
+        "Professor's Hoard Pack - Myth" : ["Y", ],
+        "Professor's Hoard Pack - Life" : ["Y", ],
+        "Professor's Hoard Pack - Balance" : ["Y", ],
+        "Professor's Hoard Pack - Storm" : ["Y", ],
+        "Professor's Hoard Pack - Ice" : ["Y", ],
+        "Professor's Hoard Pack - Fire" : ["Y", ],
+        "Duelist Gear" : ["Y", ]
     }
 }
 

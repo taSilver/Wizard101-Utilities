@@ -68,7 +68,6 @@ function loadAllTalents(){
     getFilters();
     $(".talentSelector").each((index, value) => loadOptions(value));
     updateStatsFromPet();
-    updateVisualStats();
 }
 
 function loadPresets(){
