@@ -36,3 +36,7 @@ p {
 h5 {
     padding-top:5px;
 }
+
+#gear .form-group {
+    margin-bottom: 0;
+}

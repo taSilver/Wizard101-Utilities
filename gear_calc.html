@@ -252,33 +252,75 @@
                 </select>
                 <h5>Gear Selection</h5>
                 <form name="gear" id="gear" onchange="updateStatsFromGear(); updateVisualStats();">
-                    <label for="hat">Hat (<a href="#" id="hatlink">Wiki</a>):</label>
-                    <select name="hat" id="hat" class="gearSelector">
-                    </select><br>
-                    <label for="robe">Robe (<a href="#" id="robelink">Wiki</a>):</label>
-                    <select name="robe" id="robe" class="gearSelector">
-                    </select><br>
-                    <label for="boots">Boots (<a href="#" id="bootslink">Wiki</a>):</label>
-                    <select name="talent3" id="boots" class="gearSelector">
-                    </select><br>
-                    <label for="wand">Wand (<a href="#" id="wandlink">Wiki</a>):</label>
-                    <select name="wand" id="wand" class="gearSelector">
-                    </select><br>
-                    <label for="athame">Athame (<a href="#" id="athamelink">Wiki</a>):</label>
-                    <select name="athame" id="athame" class="gearSelector">
-                    </select><br>
-                    <label for="amulet">Amulet (<a href="#" id="amuletlink">Wiki</a>):</label>
-                    <select name="amulet" id="amulet" class="gearSelector">
-                    </select><br>
-                    <label for="ring">Ring (<a href="#" id="ringlink">Wiki</a>):</label>
-                    <select name="ring" id="ring" class="gearSelector">
-                    </select><br>
-                    <label for="deck">Deck (<a href="#" id="decklink">Wiki</a>):</label>
-                    <select name="deck" id="deck" class="gearSelector">
-                    </select><br>
+                    <div class="form-group">
+                        <label for="hat">Hat (<a href="#" id="hatlink">Wiki</a>):</label>
+                        <select name="hat" id="hat" class="gearSelector">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="robe">Robe (<a href="#" id="robelink">Wiki</a>):</label>
+                        <select name="robe" id="robe" class="gearSelector">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="boots">Boots (<a href="#" id="bootslink">Wiki</a>):</label>
+                        <select name="talent3" id="boots" class="gearSelector">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="wand">Wand (<a href="#" id="wandlink">Wiki</a>):</label>
+                        <select name="wand" id="wand" class="gearSelector">
+                        </select><br>
+                        <div id="wandJewels" style="display: none">
+                            <label for="wandJewelSelects" style="vertical-align: top">Jewel(s):</label>
+                            <div id="wandJewelSelects" style="width: 200px;display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="athame">Athame (<a href="#" id="athamelink">Wiki</a>):</label>
+                        <select name="athame" id="athame" class="gearSelector">
+                        </select>
+                        <div id="athameJewels" style="display: none">
+                            <label for="athameJewelSelects" style="vertical-align: top">Jewel(s):</label>
+                            <div id="athameJewelSelects" style="width: 200px;display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="amulet">Amulet (<a href="#" id="amuletlink">Wiki</a>):</label>
+                        <select name="amulet" id="amulet" class="gearSelector">
+                        </select>
+                        <div id="amuletJewels" style="display: none">
+                            <label for="amuletJewelSelects" style="vertical-align: top">Jewel(s):</label>
+                            <div id="amuletJewelSelects" style="width: 200px;display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ring">Ring (<a href="#" id="ringlink">Wiki</a>):</label>
+                        <select name="ring" id="ring" class="gearSelector">
+                        </select>
+                        <div id="ringJewels" style="display: none">
+                            <label for="ringJewelSelects" style="vertical-align: top">Jewel(s):</label>
+                            <div id="ringJewelSelects" style="width: 200px;display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="deck">Deck (<a href="#" id="decklink">Wiki</a>):</label>
+                        <select name="deck" id="deck" class="gearSelector">
+                        </select>
+                        <div id="deckJewels" style="display: none">
+                            <label for="deckJewelSelects" style="vertical-align: top">Jewel(s):</label>
+                            <div id="deckJewelSelects" style="width: 200px;display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                     <label for="mount">Mount (<a href="#" id="mountlink">Wiki</a>):</label>
                     <select name="mount" id="mount" class="gearSelector">
-                    </select><br>
+                    </select></div>
                 </form>
                 <div class="container" style="text-align: center;">
                     <h2>Cards & Starting Pips</h2>
@@ -302,7 +344,7 @@
                     <option value="Balance">Balance</option>
                 </select>
                 <label for="level" class="form-check-label">Level:</label>
-                <input name="level" class="form-control" id="level" type="number" min="1" max="130" style="width: 80px" value="1" data-bind="value:replyNumber" onchange="loadAllGear(); updateBaseStats(); updateVisualStats()">
+                <input name="level" class="form-control" id="level" type="number" min="1" max="130" style="width: 80px" value="1" data-bind="value:replyNumber" onchange="loadAllGear(); updateBaseStats(); updateVisualStats(); oldLevel = Number.parseInt(this.value); ">
             </div><br>
 
             <a href="#" id="toggleTableOptions" data-toggle="collapse" data-target="#tableOptions">Toggle table options</a>
