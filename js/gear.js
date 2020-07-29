@@ -7,34 +7,41 @@ let requests = [];
 let oldLevel = Number.parseInt($('#level').val());
 
 function loadAllJewels(){
-    return;
-}
-
-function getJewelsForJewelSelect(){
     let minLevel = 0;
+    let maxLevel = Number.parseInt($("#level").val());
     if(document.getElementById("closeToLevel").checked){
         minLevel = maxLevel - 30;
     }
-    let maxLevel = Number.parseInt($("#level").val());
-    let jewelSchoolOnly = $("#jewelSchoolOnly").checked();
-    let school = $("#school").val();
-
-    if(Math.floor((oldLevel + 5) / 10) === Math.floor((maxLevel + 5) / 10)){
+    if(oldLevel != maxLevel && (Math.floor((oldLevel + 5) / 10) === Math.floor((maxLevel + 5) / 10))){
         return;
     }
+    let jewelSchoolOnly = $("#jewelSchoolOnly").is(":checked");
+    let school = $("#school").val();
+    for(let jewelType of ["Tear", "Triangle", "Circle", "Square"]){
+        getJewelsForJewelSelect(jewelType, minLevel, maxLevel, jewelSchoolOnly, school)
+    }
+}
+
+function getJewelsForJewelSelect(jewelType, minLevel, maxLevel, jewelSchoolOnly, school){
+    cachedJewels[jewelType] = {};
     let xhttp = new XMLHttpRequest();
-    let jewels = null;
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200){
-            cachedJewels = JSON.parse(this.responseText);
+            for(let jewel of JSON.parse(this.responseText)){
+                if(!(jewel.Category in cachedJewels[jewelType])){
+                    cachedJewels[jewelType][jewel.Category] = {}
+                }
+                cachedJewels[jewelType][jewel.Category][jewel["Name"]] = jewel;
+            }
+
         }
     }
-    xhttp.open("GET", `php/getGear.php?minLevel=${minLevel}&gearType=Jewel&maxLevel=${maxLevel}&school=${school}&schoolOnly=${packSchoolOnly}`, true)
+    xhttp.open("GET", `php/getGear.php?minLevel=${minLevel}&gearType=Jewel - ${jewelType}&maxLevel=${maxLevel}&school=${school}&schoolOnly=${jewelSchoolOnly}`, true)
     xhttp.send()
 }
 
 function loadAllGear(){
-    getJewelsForJewelSelect();
+    loadAllJewels();
     for(let gearType of gearTypes){
         document.getElementById(gearType.toLowerCase()).innerHTML = "";
         getGearForGearSelect(gearType)
@@ -252,4 +259,6 @@ function addPacks(){
     }
 }
 
-function addJewels()
+function addJewels(){
+
+}
