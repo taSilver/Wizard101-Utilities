@@ -334,9 +334,24 @@ function extractStatsFromGear(stat, statAmt){
 function updateStatsFromGear(){
     statsFromGear = {};
     for(let gearType of gearTypes){
-        let gearName = document.getElementById(gearType).value;
+        let gearName = $(`#${gearType}`).val();
         if(!(gearType in cachedGear) || !(gearName in cachedGear[gearType])) continue;
         Object.entries(cachedGear[gearType][gearName]).forEach(entry => extractStatsFromGear(entry[0], entry[1]))
+        if("Socket" in cachedGear[gearType][gearName]){
+            let j = 1;
+            $(`#${gearType}Jewels`).show();
+            $(`#${gearType}JewelSelects`).empty();
+            for(let socket in cachedGear[gearType][gearName]["Socket"]){
+                for (let i = 0; i < cachedGear[gearType][gearName]["Socket"][socket]; i++) {
+                    $(`<select name="${socket}Jewel" id="${gearType}Jewel${j}" class="jewelSelector" style="width:95px;float:left;"></select>`).appendTo(`#${gearType}JewelSelects`)
+                }
+                console.log(socket);
+                j++;
+            }
+            $(".jewelSelector").chosen();
+        } else if($(`#${gearType}Jewels`).length){
+            $(`#${gearType}Jewels`).hide();
+        }
         document.getElementById(gearType+"link").href= cachedGear[gearType][gearName]["URL"];
     }
 }
@@ -401,7 +416,5 @@ window.onload = function(){
     $(".gearSelector").chosen();
     $(".talentSelector").chosen();
     $(".miscSelector").chosen();
-
-
     flushSchool();
 }

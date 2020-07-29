@@ -1,10 +1,40 @@
 let cachedGear = {};
+let cachedJewels = {};
 let cachedGearPresets = {};
 let gearTypes = ["hat", "robe", "boots", "wand", "athame", "amulet", "ring", "deck", "mount"];
 let cachedCategories = {};
 let requests = [];
+let oldLevel = Number.parseInt($('#level').val());
+
+function loadAllJewels(){
+    return;
+}
+
+function getJewelsForJewelSelect(){
+    let minLevel = 0;
+    if(document.getElementById("closeToLevel").checked){
+        minLevel = maxLevel - 30;
+    }
+    let maxLevel = Number.parseInt($("#level").val());
+    let jewelSchoolOnly = $("#jewelSchoolOnly").checked();
+    let school = $("#school").val();
+
+    if(Math.floor((oldLevel + 5) / 10) === Math.floor((maxLevel + 5) / 10)){
+        return;
+    }
+    let xhttp = new XMLHttpRequest();
+    let jewels = null;
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200){
+            cachedJewels = JSON.parse(this.responseText);
+        }
+    }
+    xhttp.open("GET", `php/getGear.php?minLevel=${minLevel}&gearType=Jewel&maxLevel=${maxLevel}&school=${school}&schoolOnly=${packSchoolOnly}`, true)
+    xhttp.send()
+}
 
 function loadAllGear(){
+    getJewelsForJewelSelect();
     for(let gearType of gearTypes){
         document.getElementById(gearType.toLowerCase()).innerHTML = "";
         getGearForGearSelect(gearType)
@@ -218,7 +248,8 @@ function addPacks(){
         "Professor's Hoard Pack - Storm" : ["Y", ],
         "Professor's Hoard Pack - Ice" : ["Y", ],
         "Professor's Hoard Pack - Fire" : ["Y", ],
-        "Duelist Gear" : ["Y", ]
+        "Duelist Gear" : ["Y", "Duelist's Rakish Mask", "Duelist's Cloaked Doublet", "Duelist's Jaunty Boots", "Duelist's Dancing Blade", "Duelist's Fatal Razor", "Duelist's Virtuoso Talisman", "Duelist's Daredevil Ring", "Duelist's Devil-May-Care Deck"]
     }
 }
 
+function addJewels()
