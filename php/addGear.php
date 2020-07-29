@@ -9,6 +9,8 @@ function addGear($gearName, $gearCategory, $gearMeta){
     }
     if($gearCategory === "Mount"){
         $gearStats = scrapeMount($gearName);
+    } else if($gearCategory === "Jewel"){
+        $gearStats = scrapeJewel($gearName);
     } else {
         $gearStats = scrapeGear($gearName);
     }
@@ -267,9 +269,79 @@ function scrapeMount($mount){
     return $mountStats;
 }
 
+function scrapeJewel($jewel){
+    $url = $url = "http://www.wizard101central.com/wiki/Jewel:".urlencode((str_replace(' ', '_', $jewel)));
+    $jewelStats = new stdClass();
+    $jewelStats->{"Name"} = $jewel;
+    $jewelStats->{"URL"} = $url;
+    $jewelStats->{"School"} = "Universal";
+
+    ob_start();
+    $html = file_get_html($url);
+    ob_end_clean();
+    if(!$html || $html->getElementById("mw-content-text")->find(".noarticletext")){
+        echo "Name mistyped, or Jewel missing from wiki.";
+        return null;
+    }
+
+    $sections = $html->getElementById("mw-content-text")->find("div")[0]->find(".data-table", 0)->find("tr");
+    if($sections[3]->find("td", 0)->plaintext === "Level"){;
+        array_splice($sections, 3, 1);
+    }
+    preg_match("/([A-Za-z]+)/", $sections[2]->find("td", -1)->plaintext, $matches);
+    $jewelStats->{"Category"} = $matches[0];
+    preg_match("/([0-9]+)\+/", $sections[2]->find("td", -1)->plaintext, $matches);
+    $jewelStats->{"Level"} = $matches[1];
+    $jewelType = $sections[3]->find("td", -1)->plaintext;
+    $jewelStats->{"Type"} = "Jewel - ".$jewelType;
+
+    if(preg_match("/([0-9]+)/", $sections[5]->find("td", -1)->plaintext, $matches)){
+        $amount = $matches[1];
+        preg_match_all("/:\(Icon\)_([A-Za-z_]+)/", $sections[5]->find("td", -1)->outertext, $matches);
+        $refArr = ["Armor_Piercing" => "Pierce", "Damage" => "Damage Flat", "Resistance" => "Resist Flat", "Critical_Block" => "Block", "Stun Resistance" => "Stun Resist"];
+        $tableTypes = ['Accuracy', "Damage Flat", 'Pierce', 'Resist Flat', 'Block', 'Critical'];
+        $school = 'Universal';
+        if(count($matches) > 1 && count($matches[1]) > 0){
+            if($matches[1][1] === "Healing"){
+                if($jewelType === "Square"){
+                    $type = "Incoming";
+                } else {
+                    $type = "Outgoing";
+                }
+            } else {
+                $type = key_exists($matches[1][0], $refArr) ? $refArr[$matches[1][0]] : $matches[1][0];
+            }
+        } else if(strpos($sections[5]->find("td", -1)->plaintext, "Pip")){
+            if(strpos($sections[5]->find("td", -1)->plaintext, "Shadow")){
+                $type = "Shadow Rating";
+            } else {
+                $type = "Pip Chance";
+            }
+        }
+        if(!isset($type)){
+            preg_match_all("/([0-9]+)|title=\"ItemCard:([a-zA-z ]+)|href=\"(.+?)\"/", $sections[5]->find("td", -1)->outertext, $matches);
+            if(!property_exists($jewelStats, "Cards")){ $jewelStats->{"Cards"} = new stdClass(); }
+            $jewelStats->{"Cards"}->{$matches[2][2]} = new stdClass();
+            $jewelStats->{"Cards"}->{$matches[2][2]}->{"Name"} = $matches[2][2];
+            $jewelStats->{"Cards"}->{$matches[2][2]}->{"Amount"} = $matches[1][0];
+            $jewelStats->{"Cards"}->{$matches[2][2]}->{"URL"} = "http://www.wizard101central.com".$matches[3][1];
+        } else{
+            if(in_array($type, $tableTypes) || (count($matches[1]) > 1 && in_array(key_exists($matches[1][1], $refArr) ? $refArr[$matches[1][1]] : $matches[1][1], $tableTypes))){
+                if(in_array($type, ["Fire", "Ice", "Storm", "Balance", "Life", "Death", "Myth", "Shadow"])){
+                    $school = $type;
+                    $type = key_exists($matches[1][1], $refArr) ? $refArr[$matches[1][1]] : $matches[1][1];
+                }
+                $jewelStats->{$type} = new stdClass();
+                $jewelStats->{$type}->{$school} = $amount;
+            } else {
+                $jewelStats->{$type} = $amount;
+            }
+        }
+    }
+
+    return $jewelStats;
+}
+
 //echo "<pre>"; var_dump(scrapeGear("Duelist's Devil-May-Care Deck (Level 130+)")); echo "</pre>";
 //addGear($_GET['gearName'], $_GET['gearCategory'], $_GET['gearMeta']);
-//foreach(["Balance Ghulture", "Battle Havox", "Battle Narwhal", "Clockwork Courser", "Crystal Unicorn", "Death Ghulture", "Desert Racer", "Festive Fox", "Fire Ghulture", "Ice Ghulture", "Life Ghulture", "Mammoth Mini", "Myth Ghulture", "Storm Ghulture", "Vulpine Avenger", "Waddling Witch Hut"] as $mountName){
-//    addGear($mountName, "Mount", "Y");
-//}
 
