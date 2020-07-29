@@ -17,9 +17,14 @@ function addGear($gearName, $gearCategory, $gearMeta){
     if(!$gearStats){
         return;
     }
+
+    if(!isset($gearStats->{"Category"})){
+        $gearStats->{"Category"} = $gearCategory;
+    }
+
     $dbc = createConnection();
     $stmt = $dbc->prepare("INSERT INTO gear (gear_name, gear_school, gear_level, gear_type, gear_category, gear_url, gear_meta) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssissss", $gearStats->{"Name"}, $gearStats->{"School"}, $gearStats->{"Level"}, $gearStats->{"Type"}, $gearCategory, $gearStats->{"URL"}, $gearMeta);
+    $stmt->bind_param("ssissss", $gearStats->{"Name"}, $gearStats->{"School"}, $gearStats->{"Level"}, $gearStats->{"Type"}, $gearStats->{"Category"}, $gearStats->{"URL"}, $gearMeta);
     $stmt->execute();
     $stmt->close();
 
@@ -302,7 +307,7 @@ function scrapeJewel($jewel){
         $tableTypes = ['Accuracy', "Damage Flat", 'Pierce', 'Resist Flat', 'Block', 'Critical'];
         $school = 'Universal';
         if(count($matches) > 1 && count($matches[1]) > 0){
-            if($matches[1][1] === "Healing"){
+            if(count($matches[1]) > 1 && $matches[1][1] === "Healing"){
                 if($jewelType === "Square"){
                     $type = "Incoming";
                 } else {
@@ -342,6 +347,7 @@ function scrapeJewel($jewel){
     return $jewelStats;
 }
 
+addGear("Chipped Health Opal +25", "Jewel", "Y");
 //echo "<pre>"; var_dump(scrapeGear("Duelist's Devil-May-Care Deck (Level 130+)")); echo "</pre>";
 //addGear($_GET['gearName'], $_GET['gearCategory'], $_GET['gearMeta']);
 

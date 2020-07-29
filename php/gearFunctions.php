@@ -30,7 +30,7 @@ function getGear($gearType, $maxLevel, $minLevel, $school, $packSchoolOnly){
 function getGearPiece($gearId, $gearCategory, $school, $packSchoolOnly, $gearStats)
 {
     if($packSchoolOnly){
-        if(preg_match('/Pack - ([A-Za-z, ]+)/', $gearCategory, $matches)){
+        if(preg_match('/ - ([A-Za-z, ]+)/', $gearCategory, $matches)){
             $schools = explode(", ", $matches[1]);
             if(!in_array($school, $schools)){
                 return null;
